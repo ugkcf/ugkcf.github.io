@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meal Delivery Receipt</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
-    <style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
+   <style>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
@@ -119,6 +121,42 @@
             backdrop-filter: blur(5px); /* Adds a blur effect to the background */
             opacity: 1; /* Fully visible */
         }
+
+        .signature-pad-wrapper {
+            position: relative;
+            width: 300px;
+            height: 100px;
+        }
+
+        .signature-pad {
+            border: 1px solid #000;
+            border-radius: 5px;
+            width: 100%;
+            height: 100%;
+        }
+
+        .clear-signature {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            color: #888;
+            background: #efefef;
+            border-radius: 10%;
+            border: solid #bdbdbd 1px;
+            padding: 1px;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            align-items: center;
+            line-height: 20px;
+        }
+
+        .clear-signature:hover {
+            color: #333;
+        }
+
     </style>
 </head>
 <body>
@@ -127,6 +165,14 @@
         <div class="form-group">
             <label for="date">Date:</label>
             <input type="date" id="date" name="date">
+        </div>
+        <div class="form-group">
+            <label for="driver-name">Driver Name:</label>
+            <select id="driver-name" name="driver-name">
+                <option value="">Select a driver</option>
+                <option value="">Tyler Brightwell</option>
+                <option value="">Todd Harper</option>
+            </select>
         </div>
         <div class="form-group">
             <label for="prep-kitchen">Kitchen name:</label>
@@ -189,14 +235,15 @@
                 </div>
                 <div class="form-group">
                     <label for="pickup-time">Pick up time:</label>
-                    <br><input type="text" id="pickup-time" name="pickup-time">
+                    <input type="time" id="pickup-time" name="pickup-time">
                 </div>
-                <div class="signature">
-                    <div class="signature-container">
-                        <label for="pickup-signature">Kitchen Supervisor Signature:</label>
-                        <input type="text" id="pickup-signature" name="pickup-signature">
-                        <span id="pickup-signature-timestamp" class="signature-timestamp"></span>
+                <div class="signature-container">
+                    <label for="pickup-signature">Kitchen Supervisor Signature:</label>
+                    <div class="signature-pad-wrapper">
+                        <canvas id="pickup-signature-pad" class="signature-pad"></canvas>
+                        <span class="clear-signature" id="clear-pickup-signature">&times;</span>
                     </div>
+                    <span id="pickup-signature-timestamp" class="signature-timestamp"></span>
                 </div>
             </div>
 
@@ -241,14 +288,15 @@
                 </div>
                 <div class="form-group">
                     <label for="delivery-time">Delivery time:</label>
-                    <br><input type="text" id="delivery-time" name="delivery-time">
+                    <input type="time" id="delivery-time" name="delivery-time">
                 </div>
-                <div class="signature">
-                    <div class="signature-container">
-                        <label for="delivery-signature">Site Supervisor Signature:</label>
-                        <input type="text" id="delivery-signature" name="delivery-signature">
-                        <span id="delivery-signature-timestamp" class="signature-timestamp"></span>
+                <div class="signature-container">
+                    <label for="delivery-signature">Site Supervisor Signature:</label>
+                    <div class="signature-pad-wrapper">
+                        <canvas id="delivery-signature-pad" class="signature-pad"></canvas>
+                        <span class="clear-signature" id="clear-delivery-signature">&times;</span>
                     </div>
+                    <span id="delivery-signature-timestamp" class="signature-timestamp"></span>
                 </div>
             </div>
         </div>
@@ -276,144 +324,215 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
     <script>
-         $(document).ready(function() {
-        // Initialize datepicker for the main date input
-        $('#date').datepicker({
-            dateFormat: 'yy-mm-dd',
-            changeMonth: true,
-            changeYear: true,
-            yearRange: "2000:2050"
-        });
-
-        // Check if the browser supports the date input type
-        if (Modernizr.inputtypes.date) {
-            // If supported, remove the datepicker
-            $('#date').datepicker('destroy');
-        }
-
-        // Load and parse the CSV file
-        Papa.parse('sites.csv', {
-            download: true,
-            header: true,
-            complete: function(results) {
-                var sites = results.data;
-                var siteSelect = $('#site-name');
-                
-                // Populate the dropdown
-                sites.forEach(function(site) {
-                    siteSelect.append($('<option>', {
-                        value: site.name,
-                        text: site.name
-                    }));
-                });
-
-                // Handle site selection
-                siteSelect.on('change', function() {
-                    var selectedSite = sites.find(site => site.name === this.value);
-                    if (selectedSite) {
-                        $('#site-address').text(selectedSite.address);
-                    } else {
-                        $('#site-address').text('');
-                    }
-                });
+        $(document).ready(function() {
+            // Initialize datepicker for the main date input
+            $('#date').datepicker({
+                dateFormat: 'yy-mm-dd',
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "2000:2050"
+            });
+    
+            // Check if the browser supports the date input type
+            if (Modernizr.inputtypes.date) {
+                // If supported, remove the datepicker
+                $('#date').datepicker('destroy');
             }
-        });
-
-        // Function to get formatted current date and time
-        function getCurrentDateTime() {
-            const now = new Date();
-            return now.toLocaleString();
-        }
-
-        // Function to update signature timestamp
-        function updateSignatureTimestamp(signatureId, timestampId) {
-            $(signatureId).on('change', function() {
-                if ($(this).val().trim() !== '') {
-                    $(timestampId).text('Signed: ' + getCurrentDateTime());
-                } else {
-                    $(timestampId).text('');
+    
+            // Load and parse the drivers CSV file
+            Papa.parse('drivers.csv', {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    var drivers = results.data;
+                    var driverSelect = $('#driver-name');
+                    
+                    // Populate the dropdown
+                    drivers.forEach(function(driver) {
+                        driverSelect.append($('<option>', {
+                            value: driver.name,
+                            text: driver.name
+                        }));
+                    });
                 }
             });
-        }
-
-        // Update timestamps for both signature fields
-        updateSignatureTimestamp('#pickup-signature', '#pickup-signature-timestamp');
-        updateSignatureTimestamp('#delivery-signature', '#delivery-signature-timestamp');
-
-        // Initialize dialogs
-        $("#start-over-dialog, #submit-dialog, #success-dialog").dialog({
-            autoOpen: false,
-            modal: true,
-            width: 400,
-            create: function() {
-                $(this).closest(".ui-dialog").addClass("custom-dialog");
-            },
-            open: function() {
-                $('.ui-widget-overlay').addClass('custom-overlay');
-            }
-        });
-
-        $("#start-over-dialog").dialog("option", "buttons", {
-            "Yes": function() {
-                // Reset form fields
-                $('form')[0].reset();
-                $('#site-address').text('');
-                $(this).dialog("close");
-            },
-            "No": function() {
-                $(this).dialog("close");
-            }
-        });
-
-        $("#submit-dialog").dialog("option", "buttons", {
-            "Yes": function() {
-                $(this).dialog("close");
-                $("#success-dialog").dialog("open");
-            },
-            "No": function() {
-                $(this).dialog("close");
-            }
-        });
-
-        $("#success-dialog").dialog("option", "buttons", {
-            "Close": function() {
-                $(this).dialog("close");
-            }
-        });
-
-        // Start Over button click handler
-        $("#start-over").click(function() {
-            $("#start-over-dialog").dialog("open");
-        });
-
-        // Submit button click handler
-        $("#submit").click(function() {
-            $("#submit-dialog").dialog("open");
-        });
-
-        // New Ticket button click handler
-        $("#new-ticket").click(function() {
-            // Reset form fields
-            $('form')[0].reset();
-            $('#site-address').text('');
-            $("#success-dialog").dialog("close");
-        });
-    });
-
-    // Modernizr - just the small bit we need for this demo
-    Modernizr = {
-        inputtypes: (function(props) {
-            var docElement = document.createElement('input');
-            for (var i = 0; i < props.length; i++) {
-                docElement.setAttribute('type', props[i]);
-                if (docElement.type !== 'text') {
-                    return true;
+    
+            // Load and parse the sites CSV file
+            Papa.parse('sites.csv', {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    var sites = results.data;
+                    var siteSelect = $('#site-name');
+                    
+                    // Populate the dropdown
+                    sites.forEach(function(site) {
+                        siteSelect.append($('<option>', {
+                            value: site.name,
+                            text: site.name
+                        }));
+                    });
+    
+                    // Handle site selection
+                    siteSelect.on('change', function() {
+                        var selectedSite = sites.find(site => site.name === this.value);
+                        if (selectedSite) {
+                            $('#site-address').text(selectedSite.address);
+                        } else {
+                            $('#site-address').text('');
+                        }
+                    });
                 }
+            });
+    
+            // Initialize signature pads
+            var pickupSignaturePad = new SignaturePad(document.getElementById('pickup-signature-pad'));
+            var deliverySignaturePad = new SignaturePad(document.getElementById('delivery-signature-pad'));
+    
+            // Clear signature 'X' click handlers
+            $('#clear-pickup-signature').click(function() {
+                pickupSignaturePad.clear();
+                $('#pickup-signature-timestamp').text('');
+            });
+
+            $('#clear-delivery-signature').click(function() {
+                deliverySignaturePad.clear();
+                $('#delivery-signature-timestamp').text('');
+            });
+
+    
+            // Function to get formatted current date and time
+            function getCurrentDateTime() {
+                const now = new Date();
+                return now.toLocaleString();
             }
-            return false;
-        })(['date'])
-    };
+    
+            // Function to update signature timestamp
+            function updateSignatureTimestamp(signaturePad, timestampId) {
+                if (!signaturePad.isEmpty()) {
+                $(timestampId).text('Signed: ' + getCurrentDateTime());
+            } else {
+                $(timestampId).text('');
+            }
+        }
+    
+            // Update timestamps when signatures change
+            pickupSignaturePad.onEnd = function() {
+                updateSignatureTimestamp(pickupSignaturePad, '#pickup-signature-timestamp');
+            };
+
+            deliverySignaturePad.onEnd = function() {
+                updateSignatureTimestamp(deliverySignaturePad, '#delivery-signature-timestamp');
+            };
+    
+            // Initialize dialogs
+            $("#start-over-dialog, #submit-dialog, #success-dialog").dialog({
+                autoOpen: false,
+                modal: true,
+                width: 400,
+                create: function() {
+                    $(this).closest(".ui-dialog").addClass("custom-dialog");
+                },
+                open: function() {
+                    $('.ui-widget-overlay').addClass('custom-overlay');
+                }
+            });
+    
+            $("#start-over-dialog").dialog("option", "buttons", {
+                "Yes": function() {
+                    // Refreshes page to reset fields
+                    location.reload()
+                },
+                "No": function() {
+                    $(this).dialog("close");
+                }
+            });
+    
+            $("#submit-dialog").dialog("option", "buttons", {
+                "Yes": function() {
+                    generatePDF();
+                    $(this).dialog("close");
+                    $("#success-dialog").dialog("open");
+                },
+                "No": function() {
+                    $(this).dialog("close");
+                }
+            });
+    
+            $("#success-dialog").dialog("option", "buttons", {
+                "Close": function() {
+                    $(this).dialog("close");
+                }
+            });
+    
+            // Start Over button click handler
+            $("#start-over").click(function() {
+                $("#start-over-dialog").dialog("open");
+            });
+    
+            // Submit button click handler
+            $("#submit").click(function() {
+                $("#submit-dialog").dialog("open");
+            });
+    
+            // New Ticket button click handler
+            $("#new-ticket").click(function() {
+                // Refreshes page to reset fields
+                location.reload()
+            });
+    
+            function generatePDF() {
+                // Get the form element
+                const form = document.querySelector('.container');
+    
+                // Get the date, location, and tags for the filename
+                const date = $('#date').val();
+                const location = $('#site-name').val();
+                const tags = [];
+                $('input[name="pickup-meal-type"]:checked, input[name="delivery-meal-type"]:checked').each(function() {
+                    tags.push($(this).val());
+                });
+    
+                // Create the filename
+                const filename = `${date}_${location}_${tags.join('-')}.pdf`;
+    
+                // Use html2canvas to capture the form as an image
+                html2canvas(form, {
+                    scale: 2, // Increase resolution
+                    logging: false, // Disable logging
+                    useCORS: true // Enable CORS for better rendering
+                }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF({
+                        orientation: 'portrait',
+                        unit: 'px',
+                        format: [canvas.width, canvas.height]
+                    });
+    
+                    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+                    pdf.save(filename);
+                });
+            }
+        });
+    
+        // Modernizr - just the small bit we need for this demo
+        Modernizr = {
+            inputtypes: (function(props) {
+                var docElement = document.createElement('input');
+                for (var i = 0; i < props.length; i++) {
+                    docElement.setAttribute('type', props[i]);
+                    if (docElement.type !== 'text') {
+                        return true;
+                    }
+                }
+                return false;
+            })(['date'])
+        };
     </script>
 </body>
 </html>
