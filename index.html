@@ -398,12 +398,11 @@
                 pickupSignaturePad.clear();
                 $('#pickup-signature-timestamp').text('');
             });
-
+    
             $('#clear-delivery-signature').click(function() {
                 deliverySignaturePad.clear();
                 $('#delivery-signature-timestamp').text('');
             });
-
     
             // Function to get formatted current date and time
             function getCurrentDateTime() {
@@ -414,17 +413,17 @@
             // Function to update signature timestamp
             function updateSignatureTimestamp(signaturePad, timestampId) {
                 if (!signaturePad.isEmpty()) {
-                $(timestampId).text('Signed: ' + getCurrentDateTime());
-            } else {
-                $(timestampId).text('');
+                    $(timestampId).text('Signed: ' + getCurrentDateTime());
+                } else {
+                    $(timestampId).text('');
+                }
             }
-        }
     
             // Update timestamps when signatures change
             pickupSignaturePad.onEnd = function() {
                 updateSignatureTimestamp(pickupSignaturePad, '#pickup-signature-timestamp');
             };
-
+    
             deliverySignaturePad.onEnd = function() {
                 updateSignatureTimestamp(deliverySignaturePad, '#delivery-signature-timestamp');
             };
@@ -454,9 +453,8 @@
     
             $("#submit-dialog").dialog("option", "buttons", {
                 "Yes": function() {
-                    generatePDF();
+                    submitToWix();
                     $(this).dialog("close");
-                    $("#success-dialog").dialog("open");
                 },
                 "No": function() {
                     $(this).dialog("close");
@@ -484,6 +482,50 @@
                 // Refreshes page to reset fields
                 location.reload()
             });
+    
+            function submitToWix() {
+                const formData = {
+                    date: $("#date").val(),
+                    driverName: $("#driver-name").val(),
+                    location: $("#site-name").val(),
+                    address: $("#site-address").text(),
+                    pickupSignature: pickupSignaturePad.isEmpty() ? null : pickupSignaturePad.toDataURL(),
+                    pickupTimestamp: $("#pickup-signature-timestamp").text(),
+                    deliverySignature: deliverySignaturePad.isEmpty() ? null : deliverySignaturePad.toDataURL(),
+                    deliveryTimestamp: $("#delivery-signature-timestamp").text(),
+                    // Add other form fields here
+                };
+    
+                // Collect meal types
+                const mealTypes = [];
+                $('input[name="pickup-meal-type"]:checked, input[name="delivery-meal-type"]:checked').each(function() {
+                    mealTypes.push($(this).val());
+                });
+                formData.mealTypes = mealTypes;
+    
+                fetch('https://your-wix-site.com/_functions/submitForm', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log("Form submitted successfully to Wix");
+                        generatePDF();
+                        $("#success-dialog").dialog("open");
+                    } else {
+                        console.error("Error submitting to Wix:", data.message);
+                        alert("Error submitting form: " + data.message);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert("An error occurred while submitting the form. Please try again later.");
+                });
+            }
     
             function generatePDF() {
                 // Get the form element
