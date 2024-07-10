@@ -305,6 +305,8 @@
                 <button type="submit">Submit</button>
                 <!--<button type="submit" class="btn btn-submit">Submit</button>-->
             </div>
+            <input type="hidden" name="pickup-signature" id="pickup-signature-data">
+            <input type="hidden" name="delivery-signature" id="delivery-signature-data">
         </form>
     </div>
 
@@ -455,23 +457,30 @@ $(document).ready(function() {
         location.reload();
     });
 
-    // Handle form submission
+    //Handle form submission
     $("#meal-delivery-form").submit(function(e) {
-        // Add signature data to form before submission
-        var pickupSignatureData = pickupSignaturePad.isEmpty() ? "" : pickupSignaturePad.toDataURL();
-        var deliverySignatureData = deliverySignaturePad.isEmpty() ? "" : deliverySignaturePad.toDataURL();
-        
-        $('<input>').attr({
-            type: 'hidden',
-            name: 'pickup-signature',
-            value: pickupSignatureData
-        }).appendTo(this);
+    e.preventDefault(); // Prevent the default form submission
 
-        $('<input>').attr({
-            type: 'hidden',
-            name: 'delivery-signature',
-            value: deliverySignatureData
-        }).appendTo(this);
+    // Add signature data to form before submission
+    var pickupSignatureData = pickupSignaturePad.isEmpty() ? "" : pickupSignaturePad.toDataURL();
+    var deliverySignatureData = deliverySignaturePad.isEmpty() ? "" : deliverySignaturePad.toDataURL();
+    
+    $('#pickup-signature-data').val(pickupSignatureData);
+    $('#delivery-signature-data').val(deliverySignatureData);
+
+    // Submit the form
+    var form = this;
+    $.ajax({
+        url: form.action,
+        method: form.method,
+        data: $(form).serialize(),
+        success: function(response) {
+            $("#success-dialog").dialog("open");
+        },
+        error: function(error) {
+            alert('Form submission failed. Please try again.');
+        }
+    });
 
         // Form will submit normally
     });
