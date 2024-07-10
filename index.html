@@ -162,150 +162,148 @@
 <body>
     <div class="container">
         <h1>Meal Delivery Receipt</h1>
-        <form netlify>
-        <div class="form-group">
-            <label for="date">Date:</label>
-            <input type="date" id="date" name="date">
-        </div>
-        <div class="form-group">
-            <label for="driver-name">Driver Name:</label>
-            <select id="driver-name" name="driver-name">
-                <option value="">Select a driver</option>
-                <option value="">Tyler Brightwell</option>
-                <option value="">Todd Harper</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="prep-kitchen">Kitchen name:</label>
-            <span>UGK Community First</span>
-        </div>
-        <div class="form-group">
-            <label for="site-name">Location Name:</label>
-            <select id="site-name" name="site-name">
-                <option value="">Select a location</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="site-address">Location Address:</label>
-            <span id="site-address"></span>
-        </div>
+        <form id="meal-delivery-form" name="meal-delivery" netlify>
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+            <div class="form-group">
+                <label for="driver-name">Driver Name:</label>
+                <select id="driver-name" name="driver-name" required>
+                    <option value="">Select a driver</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="prep-kitchen">Kitchen name:</label>
+                <span>UGK Community First</span>
+            </div>
+            <div class="form-group">
+                <label for="site-name">Location Name:</label>
+                <select id="site-name" name="site-name" required>
+                    <option value="">Select a location</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="site-address">Location Address:</label>
+                <span id="site-address"></span>
+            </div>
 
-        <div class="receipt-section">
-            <div class="receipt">
-                <h3>Kitchen Receipt</h3>
-                <div class="meal-type">
-                    <label><input type="checkbox" name="pickup-meal-type" value="breakfast"> Breakfast</label>
-                    <label><input type="checkbox" name="pickup-meal-type" value="lunch"> Lunch</label>
-                    <label><input type="checkbox" name="pickup-meal-type" value="supper"> Supper</label>
-                    <label><input type="checkbox" name="pickup-meal-type" value="am-snack"> AM Snack</label>
-                    <label><input type="checkbox" name="pickup-meal-type" value="pm-snack"> PM Snack</label>
-                </div>
-                <table>
-                    <tr>
-                        <th>Meal components</th>
-                        <th>Counts</th>
-                    </tr>
-                    <tr>
-                        <td>Milk</td>
-                        <td><input type="number" name="pickup-milk-count"></td>
-                    </tr>
-                    <tr>
-                        <td>Fruit/Veggies</td>
-                        <td><input type="number" name="pickup-fruit-veggies-count"></td>
-                    </tr>
-                    <tr>
-                        <td>Grains</td>
-                        <td><input type="number" name="pickup-grains-count"></td>
-                    </tr>
-                    <tr>
-                        <td>Meat/Meat alternative</td>
-                        <td><input type="number" name="pickup-meat-count"></td>
-                    </tr>
-                    <tr>
-                        <td>Total meals</td>
-                        <td><input type="number" name="pickup-total-meals"></td>
-                    </tr>
-                </table>
-                <div class="form-group">
-                    <label for="pickup-menu-substitutions">Menu Substitutions:</label>
-                    <input type="text" id="pickup-menu-substitutions" name="pickup-menu-substitutions">
-                </div>
-                <div class="form-group">
-                    <label for="pickup-meal-temperature">Meal temperature:</label>
-                    <input type="text" id="pickup-meal-temperature" name="pickup-meal-temperature">
-                </div>
-                <div class="form-group">
-                    <label for="pickup-time">Pick up time:</label>
-                    <input type="time" id="pickup-time" name="pickup-time">
-                </div>
-                <div class="signature-container">
-                    <label for="pickup-signature">Kitchen Supervisor Signature:</label>
-                    <div class="signature-pad-wrapper">
-                        <canvas id="pickup-signature-pad" class="signature-pad"></canvas>
-                        <span class="clear-signature" id="clear-pickup-signature">&times;</span>
+            <div class="receipt-section">
+                <div class="receipt">
+                    <h3>Kitchen Receipt</h3>
+                    <div class="meal-type">
+                        <label><input type="checkbox" name="pickup-meal-type" value="breakfast"> Breakfast</label>
+                        <label><input type="checkbox" name="pickup-meal-type" value="lunch"> Lunch</label>
+                        <label><input type="checkbox" name="pickup-meal-type" value="supper"> Supper</label>
+                        <label><input type="checkbox" name="pickup-meal-type" value="am-snack"> AM Snack</label>
+                        <label><input type="checkbox" name="pickup-meal-type" value="pm-snack"> PM Snack</label>
                     </div>
-                    <span id="pickup-signature-timestamp" class="signature-timestamp"></span>
+                    <table>
+                        <tr>
+                            <th>Meal components</th>
+                            <th>Counts</th>
+                        </tr>
+                        <tr>
+                            <td>Milk</td>
+                            <td><input type="number" name="pickup-milk-count"></td>
+                        </tr>
+                        <tr>
+                            <td>Fruit/Veggies</td>
+                            <td><input type="number" name="pickup-fruit-veggies-count"></td>
+                        </tr>
+                        <tr>
+                            <td>Grains</td>
+                            <td><input type="number" name="pickup-grains-count"></td>
+                        </tr>
+                        <tr>
+                            <td>Meat/Meat alternative</td>
+                            <td><input type="number" name="pickup-meat-count"></td>
+                        </tr>
+                        <tr>
+                            <td>Total meals</td>
+                            <td><input type="number" name="pickup-total-meals"></td>
+                        </tr>
+                    </table>
+                    <div class="form-group">
+                        <label for="pickup-menu-substitutions">Menu Substitutions:</label>
+                        <input type="text" id="pickup-menu-substitutions" name="pickup-menu-substitutions">
+                    </div>
+                    <div class="form-group">
+                        <label for="pickup-meal-temperature">Meal temperature:</label>
+                        <input type="text" id="pickup-meal-temperature" name="pickup-meal-temperature">
+                    </div>
+                    <div class="form-group">
+                        <label for="pickup-time">Pick up time:</label>
+                        <input type="time" id="pickup-time" name="pickup-time">
+                    </div>
+                    <div class="signature-container">
+                        <label for="pickup-signature">Kitchen Supervisor Signature:</label>
+                        <div class="signature-pad-wrapper">
+                            <canvas id="pickup-signature-pad" class="signature-pad"></canvas>
+                            <span class="clear-signature" id="clear-pickup-signature">&times;</span>
+                        </div>
+                        <span id="pickup-signature-timestamp" class="signature-timestamp"></span>
+                    </div>
+                </div>
+
+                <div class="receipt">
+                    <h3>Delivery Receipt</h3>
+                    <div class="meal-type">
+                        <label><input type="checkbox" name="delivery-meal-type" value="breakfast"> Breakfast</label>
+                        <label><input type="checkbox" name="delivery-meal-type" value="lunch"> Lunch</label>
+                        <label><input type="checkbox" name="delivery-meal-type" value="supper"> Supper</label>
+                        <label><input type="checkbox" name="delivery-meal-type" value="am-snack"> AM Snack</label>
+                        <label><input type="checkbox" name="delivery-meal-type" value="pm-snack"> PM Snack</label>
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Meal components</th>
+                            <th>Counts</th>
+                        </tr>
+                        <tr>
+                            <td>Milk</td>
+                            <td><input type="number" name="delivery-milk-count"></td>
+                        </tr>
+                        <tr>
+                            <td>Fruit/Veggies</td>
+                            <td><input type="number" name="delivery-fruit-veggies-count"></td>
+                        </tr>
+                        <tr>
+                            <td>Grains</td>
+                            <td><input type="number" name="delivery-grains-count"></td>
+                        </tr>
+                        <tr>
+                            <td>Meat/Meat alternative</td>
+                            <td><input type="number" name="delivery-meat-count"></td>
+                        </tr>
+                        <tr>
+                            <td>Total meals</td>
+                            <td><input type="number" name="delivery-total-meals"></td>
+                        </tr>
+                    </table>
+                    <div class="form-group">
+                        <label for="delivery-meal-temperature">Meal temperature:</label>
+                        <input type="text" id="delivery-meal-temperature" name="delivery-meal-temperature">
+                    </div>
+                    <div class="form-group">
+                        <label for="delivery-time">Delivery time:</label>
+                        <input type="time" id="delivery-time" name="delivery-time">
+                    </div>
+                    <div class="signature-container">
+                        <label for="delivery-signature">Site Supervisor Signature:</label>
+                        <div class="signature-pad-wrapper">
+                            <canvas id="delivery-signature-pad" class="signature-pad"></canvas>
+                            <span class="clear-signature" id="clear-delivery-signature">&times;</span>
+                        </div>
+                        <span id="delivery-signature-timestamp" class="signature-timestamp"></span>
+                    </div>
                 </div>
             </div>
 
-            <div class="receipt">
-                <h3>Delivery Receipt</h3>
-                <div class="meal-type">
-                    <label><input type="checkbox" name="delivery-meal-type" value="breakfast"> Breakfast</label>
-                    <label><input type="checkbox" name="delivery-meal-type" value="lunch"> Lunch</label>
-                    <label><input type="checkbox" name="delivery-meal-type" value="supper"> Supper</label>
-                    <label><input type="checkbox" name="delivery-meal-type" value="am-snack"> AM Snack</label>
-                    <label><input type="checkbox" name="delivery-meal-type" value="pm-snack"> PM Snack</label>
-                </div>
-                <table>
-                    <tr>
-                        <th>Meal components</th>
-                        <th>Counts</th>
-                    </tr>
-                    <tr>
-                        <td>Milk</td>
-                        <td><input type="number" name="delivery-milk-count"></td>
-                    </tr>
-                    <tr>
-                        <td>Fruit/Veggies</td>
-                        <td><input type="number" name="delivery-fruit-veggies-count"></td>
-                    </tr>
-                    <tr>
-                        <td>Grains</td>
-                        <td><input type="number" name="delivery-grains-count"></td>
-                    </tr>
-                    <tr>
-                        <td>Meat/Meat alternative</td>
-                        <td><input type="number" name="delivery-meat-count"></td>
-                    </tr>
-                    <tr>
-                        <td>Total meals</td>
-                        <td><input type="number" name="delivery-total-meals"></td>
-                    </tr>
-                </table>
-                <div class="form-group">
-                    <label for="delivery-meal-temperature">Meal temperature:</label>
-                    <input type="text" id="delivery-meal-temperature" name="delivery-meal-temperature">
-                </div>
-                <div class="form-group">
-                    <label for="delivery-time">Delivery time:</label>
-                    <input type="time" id="delivery-time" name="delivery-time">
-                </div>
-                <div class="signature-container">
-                    <label for="delivery-signature">Site Supervisor Signature:</label>
-                    <div class="signature-pad-wrapper">
-                        <canvas id="delivery-signature-pad" class="signature-pad"></canvas>
-                        <span class="clear-signature" id="clear-delivery-signature">&times;</span>
-                    </div>
-                    <span id="delivery-signature-timestamp" class="signature-timestamp"></span>
-                </div>
+            <div class="button-container">
+                <button type="button" id="start-over" class="btn btn-start-over">Start Over</button>
+                <button type="submit" class="btn btn-submit">Submit</button>
             </div>
-        </div>
-
-        <div class="button-container">
-            <button id="start-over" class="btn btn-start-over">Start Over</button>
-            <button id="submit" class="btn btn-submit">Submit</button>
-        </div>
         </form>
     </div>
 
@@ -318,264 +316,198 @@
     </div>
 
     <div id="success-dialog" class="dialog" title="Submission Successful">
-        <p>Ticket submitted successfully!</p>
-        <button id="new-ticket" class="btn btn-submit">New Ticket</button>
+        <p>Form submitted successfully!</p>
+        <button id="new-form" class="btn btn-submit">New Form</button>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
     <script>
-        $(document).ready(function() {
-            // Initialize datepicker for the main date input
-            $('#date').datepicker({
-                dateFormat: 'yy-mm-dd',
-                changeMonth: true,
-                changeYear: true,
-                yearRange: "2000:2050"
+$(document).ready(function() {
+    // Initialize datepicker
+    $('#date').datepicker({
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "2000:2050"
+    });
+
+    // Check if the browser supports the date input type
+    if (Modernizr.inputtypes.date) {
+        // If supported, remove the datepicker
+        $('#date').datepicker('destroy');
+    }
+
+    // Load and parse the drivers CSV file
+    Papa.parse('drivers.csv', {
+        download: true,
+        header: true,
+        complete: function(results) {
+            var drivers = results.data;
+            var driverSelect = $('#driver-name');
+            
+            drivers.forEach(function(driver) {
+                driverSelect.append($('<option>', {
+                    value: driver.name,
+                    text: driver.name
+                }));
             });
-    
-            // Check if the browser supports the date input type
-            if (Modernizr.inputtypes.date) {
-                // If supported, remove the datepicker
-                $('#date').datepicker('destroy');
-            }
-    
-            // Load and parse the drivers CSV file
-            Papa.parse('drivers.csv', {
-                download: true,
-                header: true,
-                complete: function(results) {
-                    var drivers = results.data;
-                    var driverSelect = $('#driver-name');
-                    
-                    // Populate the dropdown
-                    drivers.forEach(function(driver) {
-                        driverSelect.append($('<option>', {
-                            value: driver.name,
-                            text: driver.name
-                        }));
-                    });
-                }
+        }
+    });
+
+    // Load and parse the sites CSV file
+    Papa.parse('sites.csv', {
+        download: true,
+        header: true,
+        complete: function(results) {
+            var sites = results.data;
+            var siteSelect = $('#site-name');
+            
+            sites.forEach(function(site) {
+                siteSelect.append($('<option>', {
+                    value: site.name,
+                    text: site.name
+                }));
             });
-    
-            // Load and parse the sites CSV file
-            Papa.parse('sites.csv', {
-                download: true,
-                header: true,
-                complete: function(results) {
-                    var sites = results.data;
-                    var siteSelect = $('#site-name');
-                    
-                    // Populate the dropdown
-                    sites.forEach(function(site) {
-                        siteSelect.append($('<option>', {
-                            value: site.name,
-                            text: site.name
-                        }));
-                    });
-    
-                    // Handle site selection
-                    siteSelect.on('change', function() {
-                        var selectedSite = sites.find(site => site.name === this.value);
-                        if (selectedSite) {
-                            $('#site-address').text(selectedSite.address);
-                        } else {
-                            $('#site-address').text('');
-                        }
-                    });
-                }
-            });
-    
-            // Initialize signature pads
-            var pickupSignaturePad = new SignaturePad(document.getElementById('pickup-signature-pad'));
-            var deliverySignaturePad = new SignaturePad(document.getElementById('delivery-signature-pad'));
-    
-            // Clear signature 'X' click handlers
-            $('#clear-pickup-signature').click(function() {
-                pickupSignaturePad.clear();
-                $('#pickup-signature-timestamp').text('');
-            });
-    
-            $('#clear-delivery-signature').click(function() {
-                deliverySignaturePad.clear();
-                $('#delivery-signature-timestamp').text('');
-            });
-    
-            // Function to get formatted current date and time
-            function getCurrentDateTime() {
-                const now = new Date();
-                return now.toLocaleString();
-            }
-    
-            // Function to update signature timestamp
-            function updateSignatureTimestamp(signaturePad, timestampId) {
-                if (!signaturePad.isEmpty()) {
-                    $(timestampId).text('Signed: ' + getCurrentDateTime());
+
+            siteSelect.on('change', function() {
+                var selectedSite = sites.find(site => site.name === this.value);
+                if (selectedSite) {
+                    $('#site-address').text(selectedSite.address);
                 } else {
-                    $(timestampId).text('');
-                }
-            }
-    
-            // Update timestamps when signatures change
-            pickupSignaturePad.onEnd = function() {
-                updateSignatureTimestamp(pickupSignaturePad, '#pickup-signature-timestamp');
-            };
-    
-            deliverySignaturePad.onEnd = function() {
-                updateSignatureTimestamp(deliverySignaturePad, '#delivery-signature-timestamp');
-            };
-    
-            // Initialize dialogs
-            $("#start-over-dialog, #submit-dialog, #success-dialog").dialog({
-                autoOpen: false,
-                modal: true,
-                width: 400,
-                create: function() {
-                    $(this).closest(".ui-dialog").addClass("custom-dialog");
-                },
-                open: function() {
-                    $('.ui-widget-overlay').addClass('custom-overlay');
+                    $('#site-address').text('');
                 }
             });
-    
-            $("#start-over-dialog").dialog("option", "buttons", {
-                "Yes": function() {
-                    // Refreshes page to reset fields
-                    location.reload()
-                },
-                "No": function() {
-                    $(this).dialog("close");
-                }
-            });
-    
-            $("#submit-dialog").dialog("option", "buttons", {
-                "Yes": function() {
-                    submitToWix();
-                    $(this).dialog("close");
-                },
-                "No": function() {
-                    $(this).dialog("close");
-                }
-            });
-    
-            $("#success-dialog").dialog("option", "buttons", {
-                "Close": function() {
-                    $(this).dialog("close");
-                }
-            });
-    
-            // Start Over button click handler
-            $("#start-over").click(function() {
-                $("#start-over-dialog").dialog("open");
-            });
-    
-            // Submit button click handler
-            $("#submit").click(function() {
-                $("#submit-dialog").dialog("open");
-            });
-    
-            // New Ticket button click handler
-            $("#new-ticket").click(function() {
-                // Refreshes page to reset fields
-                location.reload()
-            });
-    
-            function submitToWix() {
-                const formData = {
-                    date: $("#date").val(),
-                    driverName: $("#driver-name").val(),
-                    location: $("#site-name").val(),
-                    address: $("#site-address").text(),
-                    pickupSignature: pickupSignaturePad.isEmpty() ? null : pickupSignaturePad.toDataURL(),
-                    pickupTimestamp: $("#pickup-signature-timestamp").text(),
-                    deliverySignature: deliverySignaturePad.isEmpty() ? null : deliverySignaturePad.toDataURL(),
-                    deliveryTimestamp: $("#delivery-signature-timestamp").text(),
-                    // Add other form fields here
-                };
-    
-                // Collect meal types
-                const mealTypes = [];
-                $('input[name="pickup-meal-type"]:checked, input[name="delivery-meal-type"]:checked').each(function() {
-                    mealTypes.push($(this).val());
-                });
-                formData.mealTypes = mealTypes;
-    
-                fetch('https://www.education.ugkcommunityfirst.org/_functions/submitForm', {
-                    method: 'POST',
-                    headers: {
-                    'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        console.log("Form submitted successfully to Wix");
-                        generatePDF();
-                        $("#success-dialog").dialog("open");
-                    } else {
-                        console.error("Error submitting to Wix:", data.message);
-                        alert("Error submitting form: " + data.message);
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                    alert("An error occurred while submitting the form. Please try again later.");
-                });
-            }
-    
-            function generatePDF() {
-                // Get the form element
-                const form = document.querySelector('.container');
-    
-                // Get the date, location, and tags for the filename
-                const date = $('#date').val();
-                const location = $('#site-name').val();
-                const tags = [];
-                $('input[name="pickup-meal-type"]:checked, input[name="delivery-meal-type"]:checked').each(function() {
-                    tags.push($(this).val());
-                });
-    
-                // Create the filename
-                const filename = `${date}_${location}_${tags.join('-')}.pdf`;
-    
-                // Use html2canvas to capture the form as an image
-                html2canvas(form, {
-                    scale: 2, // Increase resolution
-                    logging: false, // Disable logging
-                    useCORS: true // Enable CORS for better rendering
-                }).then(canvas => {
-                    const imgData = canvas.toDataURL('image/png');
-                    const { jsPDF } = window.jspdf;
-                    const pdf = new jsPDF({
-                        orientation: 'portrait',
-                        unit: 'px',
-                        format: [canvas.width, canvas.height]
-                    });
-    
-                    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
-                    pdf.save(filename);
-                });
+        }
+    });
+
+    // Initialize signature pads
+    var pickupSignaturePad = new SignaturePad(document.getElementById('pickup-signature-pad'));
+    var deliverySignaturePad = new SignaturePad(document.getElementById('delivery-signature-pad'));
+
+    // Clear signature handlers
+    $('#clear-pickup-signature').click(function() {
+        pickupSignaturePad.clear();
+        $('#pickup-signature-timestamp').text('');
+    });
+
+    $('#clear-delivery-signature').click(function() {
+        deliverySignaturePad.clear();
+        $('#delivery-signature-timestamp').text('');
+    });
+
+    // Function to get formatted current date and time
+    function getCurrentDateTime() {
+        const now = new Date();
+        return now.toLocaleString();
+    }
+
+    // Function to update signature timestamp
+    function updateSignatureTimestamp(signaturePad, timestampId) {
+        if (!signaturePad.isEmpty()) {
+            $(timestampId).text('Signed: ' + getCurrentDateTime());
+        } else {
+            $(timestampId).text('');
+        }
+    }
+
+    // Update timestamps when signatures change
+    pickupSignaturePad.onEnd = function() {
+        updateSignatureTimestamp(pickupSignaturePad, '#pickup-signature-timestamp');
+    };
+
+    deliverySignaturePad.onEnd = function() {
+        updateSignatureTimestamp(deliverySignaturePad, '#delivery-signature-timestamp');
+    };
+
+    // Initialize dialogs
+    $("#start-over-dialog, #submit-dialog, #success-dialog").dialog({
+        autoOpen: false,
+        modal: true,
+        width: 400
+    });
+
+    $("#start-over-dialog").dialog("option", "buttons", {
+        "Yes": function() {
+            location.reload();
+        },
+        "No": function() {
+            $(this).dialog("close");
+        }
+    });
+
+    $("#submit-dialog").dialog("option", "buttons", {
+        "Yes": function() {
+            $('#meal-delivery-form').submit();
+            $(this).dialog("close");
+        },
+        "No": function() {
+            $(this).dialog("close");
+        }
+    });
+
+    $("#success-dialog").dialog("option", "buttons", {
+        "Close": function() {
+            $(this).dialog("close");
+        }
+    });
+
+    // Start Over button click handler
+    $("#start-over").click(function() {
+        $("#start-over-dialog").dialog("open");
+    });
+
+    // New Form button click handler
+    $("#new-form").click(function() {
+        location.reload();
+    });
+
+    // Handle form submission
+    $("#meal-delivery-form").submit(function(e) {
+        e.preventDefault();
+        
+        var form = $(this);
+        var url = form.attr('action');
+        
+        // Add signature data to form
+        var pickupSignatureData = pickupSignaturePad.isEmpty() ? "" : pickupSignaturePad.toDataURL();
+        var deliverySignatureData = deliverySignaturePad.isEmpty() ? "" : deliverySignaturePad.toDataURL();
+        
+        form.append('<input type="hidden" name="pickup-signature" value="' + pickupSignatureData + '">');
+        form.append('<input type="hidden" name="delivery-signature" value="' + deliverySignatureData + '">');
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: form.serialize(),
+            success: function(data)
+            {
+                console.log("Form submitted successfully");
+                $("#success-dialog").dialog("open");
+            },
+            error: function(error) {
+                console.error('Error:', error);
+                alert("An error occurred while submitting the form. Please try again later.");
             }
         });
-    
-        // Modernizr - just the small bit we need for this demo
-        Modernizr = {
-            inputtypes: (function(props) {
-                var docElement = document.createElement('input');
-                for (var i = 0; i < props.length; i++) {
-                    docElement.setAttribute('type', props[i]);
-                    if (docElement.type !== 'text') {
-                        return true;
-                    }
-                }
-                return false;
-            })(['date'])
-        };
+    });
+});
+
+// Modernizr - just the small bit we need for this demo
+window.Modernizr = {
+    inputtypes: (function(props) {
+        var docElement = document.createElement('input');
+        for (var i = 0; i < props.length; i++) {
+            docElement.setAttribute('type', props[i]);
+            if (docElement.type !== 'text') {
+                return true;
+            }
+        }
+        return false;
+    })(['date'])
+};
     </script>
 </body>
 </html>
