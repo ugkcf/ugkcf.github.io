@@ -423,7 +423,7 @@ $(document).ready(function() {
     };
 
     // Initialize dialogs
-    $("#start-over-dialog, #submit-dialog, #success-dialog").dialog({
+    $("#start-over-dialog, #success-dialog").dialog({
         autoOpen: false,
         modal: true,
         width: 400
@@ -432,16 +432,6 @@ $(document).ready(function() {
     $("#start-over-dialog").dialog("option", "buttons", {
         "Yes": function() {
             location.reload();
-        },
-        "No": function() {
-            $(this).dialog("close");
-        }
-    });
-
-    $("#submit-dialog").dialog("option", "buttons", {
-        "Yes": function() {
-            $('#meal-delivery-form').submit();
-            $(this).dialog("close");
         },
         "No": function() {
             $(this).dialog("close");
@@ -466,32 +456,23 @@ $(document).ready(function() {
 
     // Handle form submission
     $("#meal-delivery-form").submit(function(e) {
-        e.preventDefault();
-        
-        var form = $(this);
-        var url = form.attr('action');
-        
-        // Add signature data to form
+        // Add signature data to form before submission
         var pickupSignatureData = pickupSignaturePad.isEmpty() ? "" : pickupSignaturePad.toDataURL();
         var deliverySignatureData = deliverySignaturePad.isEmpty() ? "" : deliverySignaturePad.toDataURL();
         
-        form.append('<input type="hidden" name="pickup-signature" value="' + pickupSignatureData + '">');
-        form.append('<input type="hidden" name="delivery-signature" value="' + deliverySignatureData + '">');
+        $('<input>').attr({
+            type: 'hidden',
+            name: 'pickup-signature',
+            value: pickupSignatureData
+        }).appendTo(this);
 
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: form.serialize(),
-            success: function(data)
-            {
-                console.log("Form submitted successfully");
-                $("#success-dialog").dialog("open");
-            },
-            error: function(error) {
-                console.error('Error:', error);
-                alert("An error occurred while submitting the form. Please try again later.");
-            }
-        });
+        $('<input>').attr({
+            type: 'hidden',
+            name: 'delivery-signature',
+            value: deliverySignatureData
+        }).appendTo(this);
+
+        // Form will submit normally
     });
 });
 
@@ -508,6 +489,24 @@ window.Modernizr = {
         return false;
     })(['date'])
 };
+
+/* Commented out submit dialog
+$("#submit-dialog").dialog({
+    autoOpen: false,
+    modal: true,
+    width: 400
+});
+
+$("#submit-dialog").dialog("option", "buttons", {
+    "Yes": function() {
+        $('#meal-delivery-form').submit();
+        $(this).dialog("close");
+    },
+    "No": function() {
+        $(this).dialog("close");
+    }
+});
+*/
     </script>
 </body>
 </html>
